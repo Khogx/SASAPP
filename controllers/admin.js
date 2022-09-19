@@ -517,6 +517,11 @@ exports.postAddStudent = async (req, res, next) => {
     postalCode,
     contact,
   } = req.body;
+  const currentDate = new Date();
+  if(new Date(dob) > currentDate){
+    req.flash('error_msg', 'Incorrect date of birth');
+    return res.redirect("/admin/addStudent");
+  }
   const password = dob.toString().split('-').join('');
   const hashedPassword = await hashing(password);
   const sql1 =
@@ -785,6 +790,7 @@ exports.getAddDept = (req, res, next) => {
 exports.postAddDept = async (req, res, next) => {
   const deptName = req.body.department;
   const deptId = req.body.deptId;
+
   const sql1 = 'SELECT * from department where dept_id = ? or d_name = ?';
   const results = await queryParamPromise(sql1, [deptId, deptName]);
   if (results.length !== 0) {
@@ -792,7 +798,7 @@ exports.postAddDept = async (req, res, next) => {
     return res.redirect('/admin/addDept');
   } else {
     const sql2 = 'INSERT INTO department SET ?';
-    await queryParamPromise(sql2, { dept_id: deptId, d_name: deptName });
+    await queryParamPromise(sql2, { dept_id: deptId, d_name: deptName, IsActive: true });
     req.flash('success_msg', 'Department added successfully');
     res.redirect('/admin/getDept');
   }
@@ -933,3 +939,58 @@ exports.postCourseSettings = async (req, res, next) => {
   req.flash('success_msg', 'Course changed successfully!');
   res.redirect('/admin/getAllCourses');
 };
+
+exports.getStudentReport = async (req, res, next) => {
+  const sql1 = 'SELECT * FROM staff';
+  const user = req.user;
+  const data = await queryParamPromise(sql1, [user]);
+
+  const sql3 =
+    'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
+  const classData = await queryParamPromise(sql3, [data[0].st_id]);
+
+  res.render('Admin/studentReport', {
+    user: data[0],
+    classData,
+    btnInfo: 'Students',
+    page_name: 'stu-report',
+  });
+};
+
+exports.getClassReport = async (req, res, next) => {
+ // const courseId = req.params.id;
+  //const staffId = req.user;
+ // const section = req.query.section;
+ // const classData = await queryParamPromise(
+  //  'SELECT * FROM class WHERE c_id = ? AND st_id = ? AND section = ?',
+  //  [courseId, staffId, section]
+  //);
+ // const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+  //const user = req.user;
+  //
+  //const data = await queryParamPromise(sql1, [user]);
+  res.render('Admin/getClassReport', {
+    //user: data[0],
+    //classData,
+    page_name: 'cls-report',
+  });
+};
+
+
+// exports.selectClassReport = async (req, res, next) => {
+//   const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+//   const user = req.user;
+//   const data = await queryParamPromise(sql1, [user]);
+
+//   const sql3 =
+//     'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
+//   const classData = await queryParamPromise(sql3, [data[0].st_id]);
+
+//   res.render('Staff/selectClassReport', {
+//     user: data[0],
+//     classData,
+//     btnInfo: 'Check Status',
+//     page_name: 'cls-report',
+//   });
+// };
+

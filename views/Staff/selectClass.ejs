@@ -59,8 +59,10 @@
                                                                     <%= user.dept_id %>-<%=
                                                                                         classData[i].section %>
                                                                 </td>
-                                                                <td><a href="/staff/student-attendance/class/<%= classData[i].c_id %>"
-                                                                        class="btn btn-sm btn-primary"><%= btnInfo %></a>
+                                                                <td><a href="/staff/class-report/class/<%= classData[i].c_id %>?section=<%=classData[i].section%>"
+                                                                    class="btn btn-sm btn-primary">
+                                                                    <%= btnInfo %>
+                                                                </a>
                                                                 </td>
 
                                                             </tr>

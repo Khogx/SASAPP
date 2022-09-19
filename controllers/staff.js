@@ -195,57 +195,57 @@ exports.postAttendance = async (req, res, next) => {
   return res.redirect('/staff/student-attendance');
 };
 
-exports.getStudentReport = async (req, res, next) => {
-  const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
-  const user = req.user;
-  const data = await queryParamPromise(sql1, [user]);
+// exports.getStudentReport = async (req, res, next) => {
+//   const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+//   const user = req.user;
+//   const data = await queryParamPromise(sql1, [user]);
 
-  const sql3 =
-    'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
-  const classData = await queryParamPromise(sql3, [data[0].st_id]);
+//   const sql3 =
+//     'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
+//   const classData = await queryParamPromise(sql3, [data[0].st_id]);
 
-  res.render('Staff/selectClass', {
-    user: data[0],
-    classData,
-    btnInfo: 'Students',
-    page_name: 'stu-report',
-  });
-};
+//   res.render('Staff/selectClass', {
+//     user: data[0],
+//     classData,
+//     btnInfo: 'Students',
+//     page_name: 'stu-report',
+//   });
+// };
 
-exports.selectClassReport = async (req, res, next) => {
-  const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
-  const user = req.user;
-  const data = await queryParamPromise(sql1, [user]);
+// exports.selectClassReport = async (req, res, next) => {
+//   const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+//   const user = req.user;
+//   const data = await queryParamPromise(sql1, [user]);
 
-  const sql3 =
-    'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
-  const classData = await queryParamPromise(sql3, [data[0].st_id]);
+//   const sql3 =
+//     'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
+//   const classData = await queryParamPromise(sql3, [data[0].st_id]);
 
-  res.render('Staff/selectClassReport', {
-    user: data[0],
-    classData,
-    btnInfo: 'Check Status',
-    page_name: 'cls-report',
-  });
-};
+//   res.render('Staff/selectClassReport', {
+//     user: data[0],
+//     classData,
+//     btnInfo: 'Check Status',
+//     page_name: 'cls-report',
+//   });
+// };
 
-exports.getClassReport = async (req, res, next) => {
-  const courseId = req.params.id;
-  const staffId = req.user;
-  const section = req.query.section;
-  const classData = await queryParamPromise(
-    'SELECT * FROM class WHERE c_id = ? AND st_id = ? AND section = ?',
-    [courseId, staffId, section]
-  );
-  const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
-  const user = req.user;
-  const data = await queryParamPromise(sql1, [user]);
-  res.render('Staff/getClassReport', {
-    user: data[0],
-    classData,
-    page_name: 'cls-report',
-  });
-};
+// exports.getClassReport = async (req, res, next) => {
+//   const courseId = req.params.id;
+//   const staffId = req.user;
+//   const section = req.query.section;
+//   const classData = await queryParamPromise(
+//     'SELECT * FROM class WHERE c_id = ? AND st_id = ? AND section = ?',
+//     [courseId, staffId, section]
+//   );
+//   const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+//   const user = req.user;
+//   const data = await queryParamPromise(sql1, [user]);
+//   res.render('Staff/getClassReport', {
+//     user: data[0],
+//     classData,
+//     page_name: 'cls-report',
+//   });
+// };
 
 exports.getLogout = (req, res, next) => {
   res.cookie('jwt', '', { maxAge: 1 });
