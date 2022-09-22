@@ -27,8 +27,8 @@ router.post('/student-attendance', requireAuth, controller.markAttendance);
 
 // router.get('/student-report', requireAuth, controller.getStudentReport);
 
-// router.get('/class-report', requireAuth, controller.selectClassReport);
-// router.get('/class-report/class/:id', requireAuth, controller.getClassReport);
+ router.get('/class-report', requireAuth, controller.selectClassReport);
+ router.get('/class-report/class/:id', requireAuth, controller.getClassReport);
 
 // 1.5 FORGET PASSWORD
 router.get('/forgot-password', forwardAuth, controller.getForgotPassword);

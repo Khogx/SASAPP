@@ -99,9 +99,9 @@ router.post('/settings/course', requireAuth, controller.postCourseSettings);
 
 router.get('/student-report', requireAuth, controller.getStudentReport);
 
-// router.get('/class-report', requireAuth, controller.selectClassReport);
+//router.get('/class-report', requireAuth, controller.selectClassReport);
 
-router.get('/class-report', requireAuth, controller.getClassReport);
+//router.get('/class-report', requireAuth, controller.getClassReport);
 
 
 module.exports = router;

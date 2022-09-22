@@ -51,15 +51,13 @@
                                                                 style="height: max-content;">
                                                                 <% for(let i=0; i < classData.length; i++) { %>
                                                                 <option>
-                                                                    <%= classData[i].name %> (<%=
-                                                                                        classData[i].c_id %>) &nbsp;
-                                                                    - &nbsp;
+                                                                    <%= classData[i].name %>, <%=
+                                                                                        classData[i].c_id %>, &nbsp;
+                                                                     &nbsp;
                                                                     <%= classData[i].semester %>
                                                                     th sem
-                                                                    &nbsp; - &nbsp;
-                                                                    <%= user.dept_id %>-<%=
-                                                                                                    classData[i].section
-                                                                                                    %>
+                                                                    &nbsp; , &nbsp;
+                                                                    <%= user.dept_id %>
                                                                 </option>
                                                                 <% } %>
                                                             </select>
