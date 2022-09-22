@@ -38,6 +38,28 @@ exports.getLogin = (req, res, next) => {
   res.render('Staff/login');
 };
 
+exports.postApiLogin = async (req, res, next) => {
+  const { email, password } = req.body;
+  let errors = [];
+  const sql1 = 'SELECT * FROM staff WHERE email = ?';
+  const users = await queryParamPromise(sql1, [email]);
+  if (
+    users.length === 0 ||
+    !(await bcrypt.compare(password, users[0].password))
+  ) {
+    res.status(401).json({'error':'Invalid Credential'})
+  } else {
+    const token = jwt.sign({ id: users[0].st_id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.status(200).json({'response':'Login Success','jwt':token});
+  }
+};
+
 exports.postLogin = async (req, res, next) => {
   const { email, password } = req.body;
   let errors = [];
@@ -125,6 +147,23 @@ exports.getAttendance = async (req, res, next) => {
     classData,
     btnInfo: 'Students List',
     page_name: 'attendance',
+  });
+};
+
+exports.getApiAttendance = async (req, res, next) => {
+  const sql1 = 'SELECT * FROM staff WHERE st_id = ?';
+  const user = req.user;
+  const data = await queryParamPromise(sql1, [user]);
+
+  const sql3 =
+    'SELECT cl.class_id, cl.section, cl.semester, cl.c_id, co.name FROM class AS cl, course AS co WHERE st_id = ? AND co.c_id = cl.c_id ORDER BY cl.semester;';
+  const classData = await queryParamPromise(sql3, [data[0].st_id]);
+
+  res.json( {
+    // user: user,
+    classData,
+    // btnInfo: 'Students List',
+    // page_name: 'attendance',
   });
 };
 
